@@ -7,8 +7,6 @@ using System.Text.RegularExpressions;
 using CyberArk.PasswordVault.PublicInterfaces;
 using Newtonsoft.Json;
 
-//Uploaded to Git 28/11/2021 9.16pm
-
 namespace Jira.TicketingValidation{
 
 	#region Public Class - Main
@@ -103,7 +101,9 @@ namespace Jira.TicketingValidation{
 
 		#region Public Function ValidateTicket
 		public bool ValidateTicket(IValidationParametersEx parameters, out ITicketOutput ticketingOutput) {
+
 			#region Init/Declare
+
 			// Validation result (the return value) - will contain true if validate succeed, false otherwise
 			bool bValid = false;
 
@@ -114,50 +114,47 @@ namespace Jira.TicketingValidation{
 			ParseXmlParameters(parameters.XmlNodeParameters);
 
 			//Fetch Service accout
-			ITicketingConnectionAccount connectionAccount		= parameters.TicketingConnectionAccount;
+			ITicketingConnectionAccount connectionAccount	= parameters.TicketingConnectionAccount;
 
 			//Fetch from PVWA
-			cybrSafeName										= parameters.SafeName;
-			cybrObjectName										= parameters.ObjectName;
-			cybrMachineAddress									= parameters.MachineAddress.Trim().ToUpper();
-			cybrTransparentMachineAddress						= parameters.TransparentMachineAddress.Trim().ToUpper();
-			cybrDualControl										= parameters.DualControl;
-			cybrDualControlRequestConfirmed						= parameters.DualControlRequestConfirmed;
-			cybrReason											= parameters.ProvidedReason;
-			cybrUsername										= parameters.UserName;
-			cybrRequesterName									= parameters.RequestingUserFirstName + " " + parameters.RequestingUserSurname;
-			cybrEmail											= parameters.RequestingUserEmail;
-			cybrPolicy											= parameters.PolicyId;
-			//Additinal Parameter
+			cybrSafeName					= parameters.SafeName;
+			cybrObjectName					= parameters.ObjectName;
+			cybrMachineAddress				= parameters.MachineAddress.Trim().ToUpper();
+			cybrTransparentMachineAddress	= parameters.TransparentMachineAddress.Trim().ToUpper();
+			cybrDualControl					= parameters.DualControl;
+			cybrDualControlRequestConfirmed	= parameters.DualControlRequestConfirmed;
+			cybrReason						= parameters.ProvidedReason;
+			cybrUsername					= parameters.UserName;
+			cybrRequesterName				= parameters.RequestingUserFirstName + " " + parameters.RequestingUserSurname;
+			cybrEmail						= parameters.RequestingUserEmail;
+			cybrPolicy						= parameters.PolicyId;
+			cybrRequestingUser				= parameters.RequestingUser.Trim().ToUpper();
+
 			if (parameters.AdditionalProperties.ContainsKey("Tower"))
 			{
-				cybrTower										= parameters.AdditionalProperties["Tower"];
+				cybrTower		= parameters.AdditionalProperties["Tower"];
 			}
 			if (parameters.AdditionalProperties.ContainsKey("Hostname"))
 			{
-				cybrHostname									= parameters.AdditionalProperties["Hostname"];
+				cybrHostname	= parameters.AdditionalProperties["Hostname"];
 			}
 			if (parameters.AdditionalProperties.ContainsKey("Database"))
 			{
-				cybrHostname									= parameters.AdditionalProperties["Database"];
+				cybrHostname	= parameters.AdditionalProperties["Database"];
 			}
 			if (parameters.AdditionalProperties.ContainsKey("Port"))
 			{
-				cybrHostname									= parameters.AdditionalProperties["Port"];
+				cybrHostname	= parameters.AdditionalProperties["Port"];
 			}
-
-
-			//Set User info
-			cybrRequestingUser									= parameters.RequestingUser.Trim().ToUpper();
-
+			
 			//set ticketing parameter
-			ticketingSys										= parameters.SystemName.ToUpper();
-			ticketingID											= parameters.TicketId.Trim().ToUpper();
+			ticketingSys		= parameters.SystemName.ToUpper();
+			ticketingID			= parameters.TicketId.Trim().ToUpper();
 
 			//Set API Logon Parameters
-			jiralogonAddress									= parameters.TicketingConnectionAccount.Address;
-			jiralogonUsername									= parameters.TicketingConnectionAccount.UserName;
-			jiralogonPassword									= parameters.TicketingConnectionAccount.Password;
+			jiralogonAddress	= parameters.TicketingConnectionAccount.Address;
+			jiralogonUsername	= parameters.TicketingConnectionAccount.UserName;
+			jiralogonPassword	= parameters.TicketingConnectionAccount.Password;
 
 			//Audit
 			auditMessage = string.Format("Input={0} | DualControl={1} | DualControlRequestConfirmed={2} |", ticketingID, cybrDualControl, cybrDualControlRequestConfirmed);
@@ -167,29 +164,29 @@ namespace Jira.TicketingValidation{
 			#region Log
 			LogWrite("Initializing process ...");
 			LogWrite("Fetched XML parameter");
-			LogWrite(string.Format("{0}: {1}", "allowedChangeTicketStatus"				, allowedChangeTicketStatus));
-			LogWrite(string.Format("{0}: {1}", "allowedServiceRequestTicketStatus"		, allowedServiceRequestTicketStatus));
-			LogWrite(string.Format("{0}: {1}", "allowedIncidentTicketStatus"			, allowedIncidentTicketStatus));
-			LogWrite(string.Format("{0}: {1}", "allowedProblemTicketStatus"				, allowedProblemTicketStatus));
-			LogWrite(string.Format("{0}: {1}", "msgInvalidTicket"						, msgInvalidTicket));
-			LogWrite(string.Format("{0}: {1}", "msgInvalidTicketFormat"					, msgInvalidTicketFormat));
-			LogWrite(string.Format("{0}: {1}", "msgInvalidTicketStatus"					, msgInvalidTicketStatus));
-			LogWrite(string.Format("{0}: {1}", "msgConnectionError"						, msgConnectionError));
-			LogWrite(string.Format("{0}: {1}", "msgInvalidAccessTime"					, msgInvalidAccessTime));
-			LogWrite(string.Format("{0}: {1}", "msgInvalidMachine"						, msgInvalidMachine));
-			LogWrite(string.Format("{0}: {1}", "msgInvalidImplementer"					, msgInvalidImplementer));
-			LogWrite(string.Format("{0}: {1}", "msgInvalidImplementer"					, chkLogonToTicketingSystem));
-			LogWrite(string.Format("{0}: {1}", "enChkTime"								, enChkTime));
-			LogWrite(string.Format("{0}: {1}", "enChkCI"								, enChkCI));
-			LogWrite(string.Format("{0}: {1}", "enChkImplementer"						, enChkImplementer));
-			LogWrite(string.Format("{0}: {1}", "bypassJiraValidationCode"				, bypassJiraValidationCode));
-			LogWrite(string.Format("{0}: {1}", "createJiraIncValidationCode"			, createJiraIncValidationCode));
+			LogWrite(string.Format("{0}: {1}", "allowedChangeTicketStatus"			, allowedChangeTicketStatus));
+			LogWrite(string.Format("{0}: {1}", "allowedServiceRequestTicketStatus"	, allowedServiceRequestTicketStatus));
+			LogWrite(string.Format("{0}: {1}", "allowedIncidentTicketStatus"		, allowedIncidentTicketStatus));
+			LogWrite(string.Format("{0}: {1}", "allowedProblemTicketStatus"			, allowedProblemTicketStatus));
+			LogWrite(string.Format("{0}: {1}", "msgInvalidTicket"					, msgInvalidTicket));
+			LogWrite(string.Format("{0}: {1}", "msgInvalidTicketFormat"				, msgInvalidTicketFormat));
+			LogWrite(string.Format("{0}: {1}", "msgInvalidTicketStatus"				, msgInvalidTicketStatus));
+			LogWrite(string.Format("{0}: {1}", "msgConnectionError"					, msgConnectionError));
+			LogWrite(string.Format("{0}: {1}", "msgInvalidAccessTime"				, msgInvalidAccessTime));
+			LogWrite(string.Format("{0}: {1}", "msgInvalidMachine"					, msgInvalidMachine));
+			LogWrite(string.Format("{0}: {1}", "msgInvalidImplementer"				, msgInvalidImplementer));
+			LogWrite(string.Format("{0}: {1}", "msgInvalidImplementer"				, chkLogonToTicketingSystem));
+			LogWrite(string.Format("{0}: {1}", "enChkTime"							, enChkTime));
+			LogWrite(string.Format("{0}: {1}", "enChkCI"							, enChkCI));
+			LogWrite(string.Format("{0}: {1}", "enChkImplementer"					, enChkImplementer));
+			LogWrite(string.Format("{0}: {1}", "bypassJiraValidationCode"			, bypassJiraValidationCode));
+			LogWrite(string.Format("{0}: {1}", "createJiraIncValidationCode"		, createJiraIncValidationCode));
 			LogWrite("Fetched connecting account to " + ticketingSys);
-			LogWrite(string.Format("{0}: {1}", "jiralogonAddress"						, jiralogonAddress));
-			LogWrite(string.Format("{0}: {1}", "jiralogonUsername"						, jiralogonUsername));
-			LogWrite(string.Format("{0}: {1}", "Jira Object Name"						, parameters.TicketingConnectionAccount.ObjectName));
-			LogWrite(string.Format("{0}: {1}", "Jira Safe Name"							, parameters.TicketingConnectionAccount.Safe));
-			LogWrite(string.Format("{0}: {1}", "Jira Folder Name"						, parameters.TicketingConnectionAccount.Folder));
+			LogWrite(string.Format("{0}: {1}", "jiralogonAddress"					, jiralogonAddress));
+			LogWrite(string.Format("{0}: {1}", "jiralogonUsername"					, jiralogonUsername));
+			LogWrite(string.Format("{0}: {1}", "Jira Object Name"					, parameters.TicketingConnectionAccount.ObjectName));
+			LogWrite(string.Format("{0}: {1}", "Jira Safe Name"						, parameters.TicketingConnectionAccount.Safe));
+			LogWrite(string.Format("{0}: {1}", "Jira Folder Name"					, parameters.TicketingConnectionAccount.Folder));
 			LogWrite("Fetched connecting account to " + ticketingSys + " -> Additional Properties");
 			foreach (var item in parameters.TicketingConnectionAccount.Properties)
 			{
@@ -197,22 +194,22 @@ namespace Jira.TicketingValidation{
 			}
 
 			LogWrite("Fetched ticketing parameter.");
-			LogWrite(string.Format("{0}: {1}", "TicketId"								, parameters.TicketId));
-			LogWrite(string.Format("{0}: {1}", "SafeName"								, parameters.SafeName));
-			LogWrite(string.Format("{0}: {1}", "FolderName"								, parameters.FolderName));
-			LogWrite(string.Format("{0}: {1}", "ObjectName"								, parameters.ObjectName));
-			LogWrite(string.Format("{0}: {1}", "MachineAddress"							, parameters.MachineAddress));
-			LogWrite(string.Format("{0}: {1}", "TransparentMachineAddress"				, parameters.TransparentMachineAddress));
-			LogWrite(string.Format("{0}: {1}", "UserName"								, parameters.UserName));
-			LogWrite(string.Format("{0}: {1}", "PolicyId"								, parameters.PolicyId));
-			LogWrite(string.Format("{0}: {1}", "RequestingUser"							, parameters.RequestingUser));
-			LogWrite(string.Format("{0}: {1}", "RequestingUserFirstName"				, parameters.RequestingUserFirstName));
-			LogWrite(string.Format("{0}: {1}", "RequestingUserSurName"					, parameters.RequestingUserSurname));
-			LogWrite(string.Format("{0}: {1}", "BusinessEmail"							, parameters.RequestingUserEmail));
-			LogWrite(string.Format("{0}: {1}", "ProvidedReason"							, parameters.ProvidedReason));
-			LogWrite(string.Format("{0}: {1}", "SystemName"								, parameters.SystemName));
-			LogWrite(string.Format("{0}: {1}", "DualControl"							, parameters.DualControl));
-			LogWrite(string.Format("{0}: {1}", "DualControlRequestConfirmed"			, parameters.DualControlRequestConfirmed));
+			LogWrite(string.Format("{0}: {1}", "TicketId"							, parameters.TicketId));
+			LogWrite(string.Format("{0}: {1}", "SafeName"							, parameters.SafeName));
+			LogWrite(string.Format("{0}: {1}", "FolderName"							, parameters.FolderName));
+			LogWrite(string.Format("{0}: {1}", "ObjectName"							, parameters.ObjectName));
+			LogWrite(string.Format("{0}: {1}", "MachineAddress"						, parameters.MachineAddress));
+			LogWrite(string.Format("{0}: {1}", "TransparentMachineAddress"			, parameters.TransparentMachineAddress));
+			LogWrite(string.Format("{0}: {1}", "UserName"							, parameters.UserName));
+			LogWrite(string.Format("{0}: {1}", "PolicyId"							, parameters.PolicyId));
+			LogWrite(string.Format("{0}: {1}", "RequestingUser"						, parameters.RequestingUser));
+			LogWrite(string.Format("{0}: {1}", "RequestingUserFirstName"			, parameters.RequestingUserFirstName));
+			LogWrite(string.Format("{0}: {1}", "RequestingUserSurName"				, parameters.RequestingUserSurname));
+			LogWrite(string.Format("{0}: {1}", "BusinessEmail"						, parameters.RequestingUserEmail));
+			LogWrite(string.Format("{0}: {1}", "ProvidedReason"						, parameters.ProvidedReason));
+			LogWrite(string.Format("{0}: {1}", "SystemName"							, parameters.SystemName));
+			LogWrite(string.Format("{0}: {1}", "DualControl"						, parameters.DualControl));
+			LogWrite(string.Format("{0}: {1}", "DualControlRequestConfirmed"		, parameters.DualControlRequestConfirmed));
 
 			LogWrite("Fetched ticketing parameter -> Additonal Properties");
 			foreach (var item in parameters.AdditionalProperties)
@@ -232,34 +229,37 @@ namespace Jira.TicketingValidation{
 			#region Create Ticket
 			//if matching createINC by pass code, create inc ticket
 			LogWrite("Checking to create ticket...");
-			if (IsValueEmpty(createJiraIncValidationCode) == false)
+			switch (IsValueEmpty(createJiraIncValidationCode))
 			{
-				bool ChCreateInc = Regex.IsMatch(ticketingID, createJiraIncValidationCode.Trim().ToUpper());
-				if (ChCreateInc == true)
-				{
-					LogWrite("Entering Function CreateTicketIdUsingTicketingSystem()");
-					ticketingID = CreateTicketIdUsingTicketingSystem();
-					if (string.IsNullOrEmpty(ticketingID) == false)
+				case false:
+					bool ChCreateInc = Regex.IsMatch(ticketingID, createJiraIncValidationCode.Trim().ToUpper());
+					if (ChCreateInc == true)
 					{
-						ticketingOutput.TicketId = ticketingID;
-						ticketingOutput.TicketAuditOutput = " " + auditMessage + ticketingID + " created successfully.";
-						LogWrite("TicketId: " + ticketingID);
-						LogWrite(ticketingOutput.TicketAuditOutput);
-						CsvWrite(ticketingID, "Created Successfully");
-						LogWrite("Process ended...");
-						return true;
+						LogWrite("Entering Function CreateTicketIdUsingTicketingSystem()");
+						ticketingID = null;
+						ticketingID = CreateTicketIdUsingTicketingSystem();
+
+						switch (IsValueEmpty(ticketingID))
+						{
+							case true:
+								ticketingOutput.UserMessage = errorMessage + " TicketID failed to create.";
+								ticketingOutput.TicketAuditOutput = auditMessage + " TicketID failed to create.";
+								LogWrite(ticketingOutput.UserMessage);
+								LogWrite(ticketingOutput.TicketAuditOutput);
+								CsvWrite("", "Failed to Create");
+								LogWrite("Process ended...");
+								return false;
+							case false:
+								ticketingOutput.TicketId = ticketingID;
+								ticketingOutput.TicketAuditOutput = " " + auditMessage + ticketingID + " created successfully.";
+								LogWrite("TicketId: " + ticketingID);
+								LogWrite(ticketingOutput.TicketAuditOutput);
+								CsvWrite(ticketingID, "Created Successfully");
+								LogWrite("Process ended...");
+								return true;
+						}
 					}
-					if (string.IsNullOrEmpty(ticketingID) == true)
-					{
-						ticketingOutput.UserMessage = errorMessage + " TicketID failed to create.";
-						ticketingOutput.TicketAuditOutput = auditMessage + " TicketID failed to create.";
-						LogWrite(ticketingOutput.UserMessage);
-						LogWrite(ticketingOutput.TicketAuditOutput);
-						CsvWrite("", "Failed to Create");
-						LogWrite("Process ended...");
-						return false;
-					}
-				}
+					break;
 			}
 			#endregion
 
@@ -267,65 +267,80 @@ namespace Jira.TicketingValidation{
 
 			#region check emergencyMode
 			//if matching bypass code, return true
-			LogWrite("Checking to validate ticket...");
 			LogWrite("Checking TicketID matched BypassID...");
-			if (IsValueEmpty(bypassJiraValidationCode) == false)
-			{
-				emergencyMode = Regex.IsMatch(ticketingID, bypassJiraValidationCode);
-				auditMessage += " Emergency=" + emergencyMode + " | ";
-				if (emergencyMode == true)
-				{
-					auditMessage += "Ticket validated successfully.";
-					ticketingOutput.TicketAuditOutput = string.Format("{0},{1}", ticketingID, auditMessage);
-					LogWrite(ticketingOutput.TicketAuditOutput);
-					CsvWrite(ticketingID, "Validated Successfully");
-					LogWrite("Process ended...");
-					return true;
-				}
+			switch (IsValueEmpty(bypassJiraValidationCode))
+			{ 
+				case false:
+					emergencyMode = Regex.IsMatch(ticketingID, bypassJiraValidationCode);
+					auditMessage += " Emergency=" + emergencyMode + " | ";
+					if (emergencyMode == true)
+					{
+						auditMessage += "Ticket validated successfully.";
+						ticketingOutput.TicketAuditOutput = string.Format("{0},{1}", ticketingID, auditMessage);
+						LogWrite(ticketingOutput.TicketAuditOutput);
+						CsvWrite(ticketingID, "Validated Successfully");
+						LogWrite("Process ended...");
+						return true;
+					}
+					break;
+				case true:
+					errorMessage = "Please configure bypassJiraValidationCode.";
+					return false;
 			}
 			#endregion
 
 			#region check ticket format
 			//if ticket format is incorrect, return false
 			LogWrite("Checking TicketID is in correct format...");
-			if (IsValueEmpty(allowTicketFormatRegex) == false)
+			switch (IsValueEmpty(allowTicketFormatRegex))
 			{
-				bool ChTicketFormatResult = Regex.IsMatch(ticketingID, allowTicketFormatRegex);
-				if (ChTicketFormatResult == false)
-				{
-					errorMessage = string.Format("[{0} - {1}] {2}", ticketingSys, ticketingID, msgInvalidTicketFormat);
-					ticketingOutput.UserMessage = errorMessage;
-					LogWrite(ticketingOutput.UserMessage);
-					CsvWrite(ticketingID, "Failed to validate");
-					LogWrite("Process ended...");
-					return bValid;
-				}
+				case false:
+					bool ChTicketFormatResult = Regex.IsMatch(ticketingID, allowTicketFormatRegex);
+					if (ChTicketFormatResult == false)
+					{
+						errorMessage = string.Format("[{0} - {1}] {2}", ticketingSys, ticketingID, msgInvalidTicketFormat);
+						ticketingOutput.UserMessage = errorMessage;
+						LogWrite(ticketingOutput.UserMessage);
+						CsvWrite(ticketingID, "Failed to validate");
+						LogWrite("Process ended...");
+						return bValid;
+					}
+					break;
+				case true :
+					errorMessage = "Please configure allowTicketFormatRegex.";
+					return false;
 			}
 			#endregion
 
 			#region check connection to Jira
-			if (connectionAccount != null)
-			{
-				if (chkLogonToTicketingSystem == true) 
-				{
-					bool isConnectedToJira = LogonToTicketingSystem(jiralogonAddress, jiralogonUsername, jiralogonPassword);
-					LogWrite("Checking connectivity to Jira, Address=" + jiralogonAddress);
-					if (isConnectedToJira == false)
+			switch (connectionAccount == null)
+			{ 
+				case true :
+					ticketingOutput.UserMessage = "No ticketing system login account was specified";
+					LogWrite(ticketingOutput.UserMessage);
+					LogWrite("Process ended...");
+					return bValid;
+				case false :
+					switch (chkLogonToTicketingSystem)
 					{
-						errorMessage = msgConnectionError + " You can enter bypass code in ticket ID.";
-						ticketingOutput.UserMessage = errorMessage;
-						LogWrite(errorMessage);
-						LogWrite("Process ended...");
-						return bValid;
+						case true:
+							bool isConnectedToJira = LogonToTicketingSystem(jiralogonAddress, jiralogonUsername, jiralogonPassword);
+							LogWrite("Checking connectivity to Jira, Address=" + jiralogonAddress);
+							if (isConnectedToJira == false)
+							{
+								errorMessage = msgConnectionError + " You can enter bypass code in ticket ID.";
+								ticketingOutput.UserMessage = errorMessage;
+								LogWrite(errorMessage);
+								LogWrite("Process ended...");
+								return bValid;
+							}
+							LogWrite("Successfully logon to Jira: " + isConnectedToJira);
+							break;
+						case false :
+							LogWrite("Successfully logon to Jira: " + "Not checked");
+							break;
 					}
-					LogWrite("Successfully logon to Jira: " + isConnectedToJira);
-				}
-			}
-			if (connectionAccount == null) {
-				ticketingOutput.UserMessage = "No ticketing system login account was specified";
-				LogWrite(ticketingOutput.UserMessage);
-				LogWrite("Process ended...");
-				return bValid;
+					break;
 			}
 			#endregion
 
@@ -335,59 +350,60 @@ namespace Jira.TicketingValidation{
 			#endregion
 
 			#region post-validation
-			if (bValid == false)
-			{
-				auditMessage += " TicketID validation failed.";
-				ticketingOutput.UserMessage = errorMessage;
-				ticketingOutput.TicketAuditOutput = auditMessage;
-				LogWrite("Error: " + errorMessage);
-				LogWrite("Audit: " + auditMessage);
-				CsvWrite(ticketingID, "Failed to Validate");
-			}
-			if (bValid == true)
-			{
-				auditMessage += " TicketID validated successfully.";
-				ticketingOutput.TicketId = ticketingID;
-				ticketingOutput.TicketAuditOutput = auditMessage;
-				if (ticketStartTime != DateTime.MinValue && ticketEndTime != DateTime.MinValue)
-				{
-					ticketingOutput.RequestStartDate = ticketStartTime;
-					ticketingOutput.RequestEndDate = ticketEndTime;
-				}
-				LogWrite("TicketId: " + ticketingID);
-				LogWrite("Audit: " + auditMessage);
-				CsvWrite(ticketingID, "Validated Successfully");
+			switch (bValid)
+			{ 
+				case false :
+					auditMessage += " TicketID validation failed.";
+					ticketingOutput.UserMessage = errorMessage;
+					ticketingOutput.TicketAuditOutput = auditMessage;
+					LogWrite("Error: " + errorMessage);
+					LogWrite("Audit: " + auditMessage);
+					CsvWrite(ticketingID, "Failed to Validate");
+					break;
+				case true :
+					auditMessage += " TicketID validated successfully.";
+					ticketingOutput.TicketId = ticketingID;
+					ticketingOutput.TicketAuditOutput = auditMessage;
+					if (ticketStartTime != DateTime.MinValue && ticketEndTime != DateTime.MinValue)
+					{
+						ticketingOutput.RequestStartDate = ticketStartTime;
+						ticketingOutput.RequestEndDate = ticketEndTime;
+					}
+					LogWrite("TicketId: " + ticketingID);
+					LogWrite("Audit: " + auditMessage);
+					CsvWrite(ticketingID, "Validated Successfully");
 
-				//Comment on Jira - leave a record
-				LogWrite("Writing comment on TicketID: " + ticketingID);
-				var comment = new JiraComment();
-				comment.AddCommentLine("Reason: " + cybrReason);
-				comment.AddCommentLine("Requesting User: " + cybrRequesterName);
-				comment.AddCommentLine("Requesting User ADID: " + cybrRequestingUser);
-				comment.AddCommentLine("Requesting User Email: " + cybrEmail);
-				comment.AddCommentLine("Device Address: " + GetConnectionAddress());
-				comment.AddCommentLine("Safe: " + cybrSafeName);
-				comment.AddCommentLine("Object: " + cybrObjectName);
-				comment.AddCommentLine("Account: " + cybrUsername);
-				comment.AddCommentLine("Policy: " + cybrPolicy);
-				//Additional Parameter
-				OutputToCommentIfNotEmpty(comment, "Hostname", cybrHostname);
-				OutputToCommentIfNotEmpty(comment, "Database", cybrDatabase);
-				OutputToCommentIfNotEmpty(comment, "Port", cybrPort);
-				OutputToCommentIfNotEmpty(comment, "Dual Control", cybrDualControl.ToString());
-				OutputToCommentIfNotEmpty(comment, "Dual Control Request Confirmed", cybrDualControlRequestConfirmed.ToString());
+					//Comment on Jira - leave a record
+					LogWrite("Writing comment on TicketID: " + ticketingID);
+					var comment = new JiraComment();
+					comment.AddCommentLine("Reason: " + cybrReason);
+					comment.AddCommentLine("Requesting User: " + cybrRequesterName);
+					comment.AddCommentLine("Requesting User ADID: " + cybrRequestingUser);
+					comment.AddCommentLine("Requesting User Email: " + cybrEmail);
+					comment.AddCommentLine("Device Address: " + GetConnectionAddress());
+					comment.AddCommentLine("Safe: " + cybrSafeName);
+					comment.AddCommentLine("Object: " + cybrObjectName);
+					comment.AddCommentLine("Account: " + cybrUsername);
+					comment.AddCommentLine("Policy: " + cybrPolicy);
+					//Additional Parameter
+					OutputToCommentIfNotEmpty(comment, "Hostname", cybrHostname);
+					OutputToCommentIfNotEmpty(comment, "Database", cybrDatabase);
+					OutputToCommentIfNotEmpty(comment, "Port", cybrPort);
+					OutputToCommentIfNotEmpty(comment, "Dual Control", cybrDualControl.ToString());
+					OutputToCommentIfNotEmpty(comment, "Dual Control Request Confirmed", cybrDualControlRequestConfirmed.ToString());
 
-				//Call Api to Jira
-				var CommentToJira = new JiraApi()
-				{
-					url = "https://" + jiralogonAddress + "/rest/api/2/issue/" + ticketingID + "/comment",
-					method = "post",
-					username = jiralogonUsername,
-					password = jiralogonPassword,
-					body = JsonConvert.SerializeObject(comment)
-				};
-				var IsCommentSuccessul = CommentToJira.Call().IsSuccessful;
-				LogWrite(string.Format("Comment On TicketID: {0} Status: {1}", ticketingID, IsCommentSuccessul));
+					//Call Api to Jira
+					var CommentToJira = new JiraApi()
+					{
+						url = "https://" + jiralogonAddress + "/rest/api/2/issue/" + ticketingID + "/comment",
+						method = "post",
+						username = jiralogonUsername,
+						password = jiralogonPassword,
+						body = JsonConvert.SerializeObject(comment)
+					};
+					var IsCommentSuccessul = CommentToJira.Call().IsSuccessful;
+					LogWrite(string.Format("Comment On TicketID: {0} Status: {1}", ticketingID, IsCommentSuccessul));
+					break;
 			}
 			#endregion
 
@@ -399,9 +415,11 @@ namespace Jira.TicketingValidation{
 		//If value not empty, write to comment object
 		private void OutputToCommentIfNotEmpty(JiraComment comment, string key, string value)
 		{
-			if (string.IsNullOrEmpty(value) == false)
-			{
-				comment.AddCommentLine(string.Format("{0}: {1}", key, value));
+			switch (IsValueEmpty(value))
+			{	
+				case false:
+					comment.AddCommentLine(string.Format("{0}: {1}", key, value));
+					break;
 			}
 		}
 
@@ -424,10 +442,11 @@ namespace Jira.TicketingValidation{
 
 			LogWrite("Entered CreateTicketIdUsingTicketingSystem()");
 			//If there is no tower, cannot create incident ticket.
-			if (string.IsNullOrEmpty(cybrTower) == true)
+			switch (IsValueEmpty(cybrTower))
 			{
-				errorMessage += " You are not authorized to create Incident ticket in PAM Portal. Please check with PAM Team.";
-				return null;
+				case true:
+					errorMessage += " You are not authorized to create Incident ticket in PAM Portal. Please check with PAM Team.";
+					return null;
 			}
 
 			//Get address
@@ -445,6 +464,8 @@ namespace Jira.TicketingValidation{
 				password = jiralogonPassword,
 				body = JsonConvert.SerializeObject(json)
 			};
+
+			//Capture response
 			var CmdbResponse = new CmdbQueryResponse(QueryToCmbd.Call());
 
 			//Get ConfigItemId
@@ -489,29 +510,30 @@ namespace Jira.TicketingValidation{
 				password = jiralogonPassword,
 				body = JsonConvert.SerializeObject(incidentTicket)
 			};
-			var response = LogonToJira.Call();
 
 			//Capture response
+			var response = LogonToJira.Call();
 			var responseHandle = new JiraCreateTicketResponse(response);
 
 			//Get ticketID
-			if (responseHandle.StatusCode == 201)
+			switch (responseHandle.StatusCode)
 			{
-				return responseHandle.GetTicketID();
-			}
-			else
-			{
-				errorMessage = "API response status code is not 201(created). " + responseHandle.GetError();
-				return null;
-			}
+				case 201:
+					return responseHandle.GetTicketID();
+				default:
+					errorMessage = "API response status code is not 201(created). " + responseHandle.GetError();
+					return null;
+			}			
 		}
 
 		//If value not empty, write to comment object
 		private void OutputToIncDescIfNotEmpty(Ticket incidentTicket, string key, string value)
 		{
-			if (string.IsNullOrEmpty(value) == false)
+			switch (IsValueEmpty(value))
 			{
-				incidentTicket.AppendDescription(string.Format("{0}: {1}", key, value));
+				case false:
+					incidentTicket.AppendDescription(string.Format("{0}: {1}", key, value));
+					break;
 			}
 		}
 		#endregion
@@ -520,12 +542,6 @@ namespace Jira.TicketingValidation{
 		private bool CheckTicketIdValidity(string ticketID)
 		{
 			LogWrite("Entered CheckTicketIdValidity()");
-			
-			//Declare
-			bool ChkCIResult			= false;
-			bool ChkTimeResult			= false;
-			bool ChkImplementerResult	= false;
-			bool ChkCurrentTicketStatus	= false;
 
 			//Checking bypassValidateTimeMode;
 			bypassValidateTimeMode		= ticketID.Contains(bypassJiraValidateTimeStampCode);
@@ -581,53 +597,63 @@ namespace Jira.TicketingValidation{
 
 			var response = QueryToJira.Call();
 
-			//Valid Ticket
-			if (response.IsSuccessful == true)
-			{
-				var JiraQuery = new JiraQueryResponse(response);
+			switch (response.IsSuccessful)
+			{ 
+				case true:
+					var JiraQuery = new JiraQueryResponse(response);
 
-				switch (ticketCategory)
-				{
-					case "CR":
-						ChkTimeResult			= ValidateTime(JiraQuery);
-						ChkCIResult				= ValidateCI(JiraQuery);
-						ChkImplementerResult	= ValidateAssignee(JiraQuery);
-						ChkCurrentTicketStatus	= ValidateTicketStatus(JiraQuery, ticketCategory);
-						break;
+					bool ChkCIResult;
+					bool ChkTimeResult;
+					bool ChkImplementerResult;
+					bool ChkCurrentTicketStatus;
 
-					case "SR":
-						ChkTimeResult			= true;
-						ChkCIResult				= true;
-						ChkImplementerResult	= ValidateAssignee(JiraQuery);
-						ChkCurrentTicketStatus	= ValidateTicketStatus(JiraQuery, ticketCategory);
-						break;
+					switch (ticketCategory)
+					{
+						//Change Ticket
+						case "CR":
+							ChkTimeResult = ValidateTime(JiraQuery);
+							ChkCIResult = ValidateCI(JiraQuery);
+							ChkImplementerResult = ValidateAssignee(JiraQuery);
+							ChkCurrentTicketStatus = ValidateTicketStatus(JiraQuery, ticketCategory);
+							break;
 
-					case "INC":
-						ChkTimeResult			= true;
-						ChkCIResult				= true;
-						ChkImplementerResult	= ValidateAssignee(JiraQuery);
-						ChkCurrentTicketStatus	= ValidateTicketStatus(JiraQuery, ticketCategory);
-						break;
+						//Service Ticket
+						case "SR":
+							ChkTimeResult = true;
+							ChkCIResult = true;
+							ChkImplementerResult = ValidateAssignee(JiraQuery);
+							ChkCurrentTicketStatus = ValidateTicketStatus(JiraQuery, ticketCategory);
+							break;
 
-					case "PR":
-						ChkTimeResult			= true;
-						ChkCIResult				= true;
-						ChkImplementerResult	= ValidateAssignee(JiraQuery);
-						ChkCurrentTicketStatus	= ValidateTicketStatus(JiraQuery, ticketCategory);
-						break;
-				}
+						//Incident Ticket
+						case "INC":
+							ChkTimeResult = true;
+							ChkCIResult = true;
+							ChkImplementerResult = ValidateAssignee(JiraQuery);
+							ChkCurrentTicketStatus = ValidateTicketStatus(JiraQuery, ticketCategory);
+							break;
 
-				return (ChkTimeResult && ChkCIResult && ChkImplementerResult && ChkCurrentTicketStatus);
+						//Problem Ticket
+						case "PR":
+							ChkTimeResult = true;
+							ChkCIResult = true;
+							ChkImplementerResult = ValidateAssignee(JiraQuery);
+							ChkCurrentTicketStatus = ValidateTicketStatus(JiraQuery, ticketCategory);
+							break;
+
+						default:
+							errorMessage += "Ticket was not configured to be validated.";
+							return false;
+					}
+					return (ChkTimeResult && ChkCIResult && ChkImplementerResult && ChkCurrentTicketStatus);
+
+				case false:
+					errorMessage = string.Format("[{0} - {1}] {2}", ticketingSys, ticketingID, msgInvalidTicket);
+					break;
 			}
 
-			//Invalid Ticket
-			if (response.IsSuccessful == false)
-			{
-				errorMessage = string.Format("[{0} - {1}] {2}", ticketingSys, ticketingID, msgInvalidTicket);
-				return false;
-			}
-
-			errorMessage = "Exception occurred. Please check with PAM Administrator.";
+			errorMessage = "Did not receive response from Jira.";
+			LogWrite(errorMessage);
 			return false;
 		}
 

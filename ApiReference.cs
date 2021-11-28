@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using RestSharp;
 using Newtonsoft.Json.Linq;
 
-
-
 namespace Jira.TicketingValidation
 {
 	#region Public Class - to contrust json body to create Jira Ticket
@@ -162,24 +160,24 @@ namespace Jira.TicketingValidation
 
 		public CmdbQuery(string address)
 		{
-			Init(address);
+			SetIql(address);
 		}
 
-		public void Init(string address)
+		public void SetIql(string address)
 		{
-			IPAddress ip;
-			bool isIP = IPAddress.TryParse(address, out ip);
+            bool isIP = IPAddress.TryParse(address, out _);
 
-			//IP Address
-			if (isIP == true)
-			{
-				iql = "ObjectType = Host And \"Production LAN IP\" = " + address.Trim().ToUpper();
-			}
+			switch (isIP)
+            { 
+				//Address is IP
+				case true:
+					iql = "ObjectType = Host And \"Production LAN IP\" = " + address.Trim().ToUpper();
+					break;
 
-			//Hostname
-			if (isIP == false)
-			{
-				iql = "ObjectType = Host And Name = " + address.Trim().ToUpper();
+				//Address is hostname/FQDN
+				case false:
+					iql = "ObjectType = Host And Name = " + address.Trim().ToUpper();
+					break;
 			}
 		}
 	}
@@ -265,13 +263,13 @@ namespace Jira.TicketingValidation
 
 	public class JiraQueryResponse : ApiReponse
 	{
+		private string CustomFieldId_Ci { get; set; }
+
 		public JiraQueryResponse(IRestResponse restResponse)
 		{
 			Response = restResponse;
 			Jobject = Newtonsoft.Json.Linq.JObject.Parse(Response.Content);
 		}
-
-		private string CustomFieldId_Ci { get; set; }
 
 		private string[] GetCustomFieldArray(string customFieldId)
 		{
@@ -373,7 +371,7 @@ namespace Jira.TicketingValidation
 
 		public string GetTicketID()
 		{
-			bool json_key_Exist = Jobject.TryGetValue("key", out JToken jToken_key);
+            bool json_key_Exist = Jobject.TryGetValue("key", out _);
 			if (json_key_Exist == true)
 			{
 				return (string)Jobject["key"];
