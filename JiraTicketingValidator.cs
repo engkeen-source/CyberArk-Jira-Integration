@@ -554,6 +554,7 @@ namespace Jira.TicketingValidation{
 
 				//Extract TicketID
 				ticketID				= ticketID.Replace(bypassJiraValidateTimeStampCode, "").Trim();
+				ticketingID				= ticketID;
 			}
 			LogWrite("bypassValidateTimeMode: " + bypassValidateTimeMode);
 			LogWrite("enChkTime: "				+ enChkTime);
