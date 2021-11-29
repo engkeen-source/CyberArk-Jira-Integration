@@ -769,7 +769,7 @@ namespace Jira.TicketingValidation{
 
 				if (result == false)
 				{
-					errorMessage = string.Format("[{0} - {1}] No assignee in assigned ticket.", ticketingSys, ticketingID);
+					errorMessage = string.Format("[{0} - {1}] {2} is not ticket's assignee.", ticketingSys, ticketingID, cybrRequestingUser.ToLower());
 				}
 			}
 
