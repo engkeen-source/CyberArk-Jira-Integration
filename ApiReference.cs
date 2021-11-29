@@ -19,7 +19,7 @@ namespace Jira.TicketingValidation
         {
             fields = new Fields()
             {
-                description = "Ticket created by PAM Web portal.",
+                description = "Ticket created from PAM Web portal.",
 
                 //service desk
                 issuetype = new Dictionary<string, string> { { "id", "10005" } },
@@ -78,9 +78,16 @@ namespace Jira.TicketingValidation
                 { "UNIX",           "11410" }
             };
 
-            string towerID = Dict[towerName.Trim().ToUpper()];
+            //Check tower exist
+            switch (Dict.ContainsKey(towerName))
+            {
+                case true: 
+                    string towerID = Dict[towerName.Trim().ToUpper()];
+                    fields.customfield_11800.Add(new Dictionary<string, string> { { "id", towerID } });
+                    break;
+            }
 
-            fields.customfield_11800.Add(new Dictionary<string, string> { { "id", towerID } });
+
         }
 
         //add assignee
