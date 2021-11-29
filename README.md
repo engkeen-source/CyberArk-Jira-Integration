@@ -49,51 +49,51 @@
 
 1. Login to PVWA as administrator, go to Option -> Ticketing System and configure below parameter.
 
-allowedChangeTicketStatus
+  allowedChangeTicketStatus
 
-allowedServiceRequestTicketStatus
+  allowedServiceRequestTicketStatus
 
-allowedIncidentTicketStatus
+  allowedIncidentTicketStatus
 
-allowedProblemTicketStatus
+  allowedProblemTicketStatus
 
-allowTicketFormatRegex
+  allowTicketFormatRegex
 
-msgInvalidTicket
+  msgInvalidTicket
 
-msgInvalidTicketFormat
+  msgInvalidTicketFormat
 
-msgInvalidTicketStatus
+  msgInvalidTicketStatus
 
-msgConnectionError
+  msgConnectionError
 
-msgInvalidAccessTime
+  msgInvalidAccessTime
 
-msgInvalidMachine
+  msgInvalidMachine
 
-msgInvalidImplementer
+  msgInvalidImplementer
 
-chkLogonToTicketingSystem
+  chkLogonToTicketingSystem
 
-enChkTime
+  enChkTime
 
-enChkCI
+  enChkCI
 
-enChkImplementer
+  enChkImplementer
 
-bypassJiraValidationCode
+  bypassJiraValidationCode
 
-bypassJiraValidateTimeStampCode
+  bypassJiraValidateTimeStampCode
 
-createJiraIncValidationCode
+  createJiraIncValidationCode
 
-jiraApiKey_CI
+  jiraApiKey_CI
 
-jiraApiKey_StartTime
+  jiraApiKey_StartTime
 
-jiraApiKey_EndTime
+  jiraApiKey_EndTime
 
-logFilePath
+  logFilePath
 
 
 
