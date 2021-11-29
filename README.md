@@ -45,7 +45,9 @@
   - User need to enter bypass code in ticket ID
   - bypass code can be configured in PVWA -> Option -> Ticketing System
 
-# Configurable Item in PVWA -> Option -> Ticketing System
+# Configurable Item in PVWA
+
+1. Login to PVWA as administrator, go to Option -> Ticketing System and configure below parameter.
 
 allowedChangeTicketStatus
 
