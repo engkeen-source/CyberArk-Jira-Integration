@@ -41,3 +41,52 @@
 5. Reporting/Overview
   - Csv file will be generated in PVWA server, regarding the ticket validated success/fail, created success/fail.
 
+6. Bypass Jira Validation Check in the event ticketing system is not available.
+  - User need to enter bypass code in ticket ID
+  - bypass code can be configured in PVWA -> Option -> Ticketing System
+
+# Configurable Item in PVWA -> Option -> Ticketing System
+
+allowedChangeTicketStatus
+allowedServiceRequestTicketStatus
+allowedIncidentTicketStatus
+allowedProblemTicketStatus
+
+allowTicketFormatRegex
+
+msgInvalidTicket
+msgInvalidTicketFormat
+msgInvalidTicketStatus
+msgConnectionError
+msgInvalidAccessTim
+msgInvalidMachine
+msgInvalidImplementer
+
+chkLogonToTicketingSystem
+
+enChkTime
+enChkCI
+enChkImplementer
+
+bypassJiraValidationCode
+bypassJiraValidateTimeStampCode
+
+createJiraIncValidationCode
+
+jiraApiKey_CI
+jiraApiKey_StartTime
+jiraApiKey_EndTime
+
+logFilePath
+
+
+
+
+
+
+
+
+
+
+
+
