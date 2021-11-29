@@ -48,33 +48,47 @@
 # Configurable Item in PVWA -> Option -> Ticketing System
 
 allowedChangeTicketStatus
+
 allowedServiceRequestTicketStatus
+
 allowedIncidentTicketStatus
+
 allowedProblemTicketStatus
 
 allowTicketFormatRegex
 
 msgInvalidTicket
+
 msgInvalidTicketFormat
+
 msgInvalidTicketStatus
+
 msgConnectionError
-msgInvalidAccessTim
+
+msgInvalidAccessTime
+
 msgInvalidMachine
+
 msgInvalidImplementer
 
 chkLogonToTicketingSystem
 
 enChkTime
+
 enChkCI
+
 enChkImplementer
 
 bypassJiraValidationCode
+
 bypassJiraValidateTimeStampCode
 
 createJiraIncValidationCode
 
 jiraApiKey_CI
+
 jiraApiKey_StartTime
+
 jiraApiKey_EndTime
 
 logFilePath
