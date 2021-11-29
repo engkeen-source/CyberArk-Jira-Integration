@@ -403,7 +403,7 @@ namespace Jira.TicketingValidation{
 						password = jiralogonPassword,
 						body = JsonConvert.SerializeObject(comment)
 					};
-					var IsCommentSuccessul = CommentToJira.Call().IsSuccessful.ToString();
+					bool IsCommentSuccessul = (int)CommentToJira.Call().StatusCode == 201;
 					LogWrite(string.Format("Comment On TicketID: {0} Status: {1}", ticketingID, IsCommentSuccessul));
 					break;
 			}
