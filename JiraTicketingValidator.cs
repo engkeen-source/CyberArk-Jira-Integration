@@ -403,7 +403,7 @@ namespace Jira.TicketingValidation{
 						password = jiralogonPassword,
 						body = JsonConvert.SerializeObject(comment)
 					};
-					var IsCommentSuccessul = CommentToJira.Call().IsSuccessful;
+					var IsCommentSuccessul = CommentToJira.Call().IsSuccessful.ToString();
 					LogWrite(string.Format("Comment On TicketID: {0} Status: {1}", ticketingID, IsCommentSuccessul));
 					break;
 			}
@@ -1016,21 +1016,21 @@ namespace Jira.TicketingValidation{
 				//TicketID, Validation Status, Reason, Safe, Object, Policy
 				//Connection Address, Account, User, FirstName, Email
 				//Dual Control, Dual Control Request Confirmed, emergencyMode
-				var header = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}"
-					, "Date" , "Ticketing System" , "TicketID" , "Validation Status" 
+				var header = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16}"
+					, "Date" , "Ticketing System" , "TicketID" , "Validation Status"
 					, "Provided Reason" , "Safe" , "Object" , "Policy"
 					, "Connection Address" , "Account" , "User" , "FirstName" , "Email"
-					, "Dual Control" , "Dual Control Request Confirmed" , "Emergency Mode");
+					, "Dual Control" , "Dual Control Request Confirmed" , "Emergency Mode" , "ByPassValidationTimeMode");
 				header += Environment.NewLine;
 				File.AppendAllText(csvFile, header);
 			}
 
 			//Append Message
-			var messageToAppend = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}"
+			var messageToAppend = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16}"
 					, DateTime.Now.ToString() ,ticketingSys , TicketID , ValidationStatus 
 					, cybrReason.Replace(",","|") , cybrSafeName , cybrObjectName , cybrPolicy
 					, GetConnectionAddress() , cybrUsername , cybrRequestingUser , cybrRequesterName , cybrEmail
-					, cybrDualControl.ToString() , cybrDualControlRequestConfirmed.ToString(), emergencyMode.ToString());
+					, cybrDualControl.ToString() , cybrDualControlRequestConfirmed.ToString(), emergencyMode.ToString() , bypassValidateTimeMode.ToString());
 			messageToAppend += Environment.NewLine;
 			File.AppendAllText(csvFile, messageToAppend);
 		}
