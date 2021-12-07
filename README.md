@@ -11,7 +11,7 @@
 6. Copy this dll to PVWA Bin folder.
 
 # Function Implemented
-1. Validate ticket based on
+1. Validate ticket
   - Ticket's assignee need to match with PVWA user
   - Ticket's status need to match with allowed status configured in PVWA -> Option -> Ticketing System
   - Ticket's start time and end time need to match with PVWA user request time.
@@ -38,10 +38,10 @@
 4. Logging
   - Log will be generated in PVWA server, file path can be configured  in PVWA -> Option -> Ticketing System
 
-5. Reporting/Overview
+5. Reporting
   - Csv file will be generated in PVWA server, regarding the ticket validated success/fail, created success/fail.
 
-6. Bypass Jira Validation Check in the event ticketing system is not available.
+6. Bypass Jira Validation Check in the event that jira is not available.
   - User need to enter bypass code in ticket ID
   - bypass code can be configured in PVWA -> Option -> Ticketing System
 
