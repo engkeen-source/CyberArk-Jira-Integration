@@ -3,7 +3,9 @@ using System.Net;
 using System.Text;
 using System.Collections.Generic;
 using RestSharp;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 
 //Git
 
@@ -143,6 +145,13 @@ namespace Jira.TicketingValidation
     public class JiraComment
     {
         public string body { get; set; }
+        [JsonProperty(PropertyName = "public")]
+        public string publicType { get; set; }
+
+        public JiraComment()
+        {
+            publicType = "false";
+        }
 
         public void AddCommentLine(string message)
         {
@@ -203,13 +212,13 @@ namespace Jira.TicketingValidation
         public string url { get; set; }
         public string method { get; set; } = "GET";
         public string body { get; set; }
-        public int timeout { get; set; } = 60000; //60 seconds
+        public int timeout { get; set; }
 
         private RestClient client { get; set; }
         private void SetNewClient()
         {
             client = new RestClient(url);
-            client.Timeout = timeout;
+            client.Timeout = -1;
         }
 
         private RestRequest request { get; set; }

@@ -142,11 +142,11 @@ namespace Jira.TicketingValidation{
 			}
 			if (parameters.AdditionalProperties.ContainsKey("Database"))
 			{
-				cybrHostname	= parameters.AdditionalProperties["Database"];
+				cybrDatabase	= parameters.AdditionalProperties["Database"];
 			}
 			if (parameters.AdditionalProperties.ContainsKey("Port"))
 			{
-				cybrHostname	= parameters.AdditionalProperties["Port"];
+				cybrPort	= parameters.AdditionalProperties["Port"];
 			}
 			
 			//set ticketing parameter
@@ -228,7 +228,9 @@ namespace Jira.TicketingValidation{
 			}
 			#endregion
 
-			#region Create Ticket
+			#region Create Ticket  - not using
+
+			/*
 			//if matching createINC by pass code, create inc ticket
 			LogWrite("Checking to create ticket...");
 			switch (IsValueEmpty(createJiraIncValidationCode))
@@ -263,6 +265,7 @@ namespace Jira.TicketingValidation{
 					}
 					break;
 			}
+			*/
 			#endregion
 
 			#region Validate Ticket
@@ -655,7 +658,7 @@ namespace Jira.TicketingValidation{
 					break;
 			}
 
-			errorMessage = "Did not receive response from Jira.";
+			errorMessage = string.Format("[{0} - {1}] {2}", ticketingSys, ticketingID, msgInvalidTicket);
 			LogWrite(errorMessage);
 			return false;
 		}
