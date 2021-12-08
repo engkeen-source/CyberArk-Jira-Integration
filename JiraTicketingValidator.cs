@@ -400,7 +400,7 @@ namespace Jira.TicketingValidation{
 					//Call Api to Jira
 					var CommentToJira = new JiraApi()
 					{
-						url = "https://" + jiralogonAddress + "/rest/api/2/issue/" + ticketingID + "/comment",
+						url = "https://" + jiralogonAddress + "/rest/servicedeskapi/request/" + ticketingID + "/comment",
 						method = "post",
 						username = jiralogonUsername,
 						password = jiralogonPassword,
