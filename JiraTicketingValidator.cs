@@ -154,7 +154,11 @@ namespace Jira.TicketingValidation{
 			ticketingID			= parameters.TicketId.Trim().ToUpper();
 
 			//Set API Logon Parameters
-			jiralogonAddress	= parameters.TicketingConnectionAccount.Address;
+			jiralogonAddress = parameters.TicketingConnectionAccount.Address;
+			if (parameters.AdditionalProperties.ContainsKey("URL"))
+			{
+				jiralogonAddress = parameters.AdditionalProperties["URL"];
+			}
 			jiralogonUsername	= parameters.TicketingConnectionAccount.UserName;
 			jiralogonPassword	= parameters.TicketingConnectionAccount.Password;
 

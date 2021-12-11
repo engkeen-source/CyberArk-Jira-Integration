@@ -218,7 +218,7 @@ namespace Jira.TicketingValidation
         private void SetNewClient()
         {
             client = new RestClient(url);
-            client.Timeout = -1;
+            client.Timeout = 15000; //15 second
         }
 
         private RestRequest request { get; set; }
