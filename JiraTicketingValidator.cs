@@ -80,10 +80,11 @@ namespace Jira.TicketingValidation{
 		public bool enChkTime							= true;
 		public bool enChkImplementer					= true;
 
-		//set jira api response key
+		//set jira api parameter
 		public string jiraApiKey_CI						= string.Empty;
 		public string jiraApiKey_StartTime				= string.Empty;
 		public string jiraApiKey_EndTime				= string.Empty;
+		public int jiraApiCall_Timeout					= 5000; //5 Second by default
 
 		//internal paramater
 		public string logMessage						= string.Empty;
@@ -154,7 +155,7 @@ namespace Jira.TicketingValidation{
 			ticketingID			= parameters.TicketId.Trim().ToUpper();
 
 			//Set API Logon Parameters
-			jiralogonAddress = parameters.TicketingConnectionAccount.Address;
+			jiralogonAddress	= parameters.TicketingConnectionAccount.Address;
 			if (parameters.AdditionalProperties.ContainsKey("URL"))
 			{
 				jiralogonAddress = parameters.AdditionalProperties["URL"];
@@ -187,6 +188,7 @@ namespace Jira.TicketingValidation{
 			LogWrite(string.Format("{0}: {1}", "enChkImplementer"					, enChkImplementer));
 			LogWrite(string.Format("{0}: {1}", "bypassJiraValidationCode"			, bypassJiraValidationCode));
 			LogWrite(string.Format("{0}: {1}", "createJiraIncValidationCode"		, createJiraIncValidationCode));
+			LogWrite(string.Format("{0}: {1}", "jiraApiCall_Timeout"				, jiraApiCall_Timeout));
 			LogWrite("Fetched connecting account to " + ticketingSys);
 			LogWrite(string.Format("{0}: {1}", "jiralogonAddress"					, jiralogonAddress));
 			LogWrite(string.Format("{0}: {1}", "jiralogonUsername"					, jiralogonUsername));
@@ -408,6 +410,7 @@ namespace Jira.TicketingValidation{
 						method = "post",
 						username = jiralogonUsername,
 						password = jiralogonPassword,
+						timeout = jiraApiCall_Timeout,
 						body = JsonConvert.SerializeObject(comment)
 					};
 					bool IsCommentSuccessul = (int)CommentToJira.Call().StatusCode == 201;
@@ -602,7 +605,8 @@ namespace Jira.TicketingValidation{
 				url = "https://" + jiralogonAddress + "/rest/api/2/issue/" + ticketID,
 				method = "get",
 				username = jiralogonUsername,
-				password = jiralogonPassword
+				password = jiralogonPassword,
+				timeout = jiraApiCall_Timeout
 			};
 
 			var response = QueryToJira.Call();
@@ -729,6 +733,7 @@ namespace Jira.TicketingValidation{
 					method = "post",
 					username = jiralogonUsername,
 					password = jiralogonPassword,
+					timeout = jiraApiCall_Timeout,
 					body = JsonConvert.SerializeObject(json)
 				};
 				var CmdbResponse = new CmdbQueryResponse(QueryToCmbd.Call());
@@ -941,6 +946,10 @@ namespace Jira.TicketingValidation{
 			jiraApiKey_CI						= ExtractValueFromXML(checkParameters, "jiraJsonKey_CI");
 			jiraApiKey_StartTime				= ExtractValueFromXML(checkParameters, "jiraJsonKey_StartTime");
 			jiraApiKey_EndTime					= ExtractValueFromXML(checkParameters, "jiraJsonKey_EndTime");
+
+			//jira api call time out
+			string str_jiraApiCall_Timeout		= ExtractValueFromXML(checkParameters, "jiraApiCall_Timeout");
+			Int32.TryParse(str_jiraApiCall_Timeout, out jiraApiCall_Timeout);
 
 			//log
 			logFilePath							= ExtractValueFromXML(checkParameters, "logFilePath");
