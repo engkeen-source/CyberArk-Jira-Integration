@@ -33,7 +33,7 @@
   <ItemGroup>
     <Reference Include="CyberArk.PasswordVault.PublicInterfaces, Version=4.60.0.0, Culture=neutral, PublicKeyToken=40be1dbc8718670f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\CyberArk.PasswordVault.PublicInterfaces.dll</HintPath>
+      <HintPath>bin\Debug\v11.7\CyberArk.PasswordVault.PublicInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
