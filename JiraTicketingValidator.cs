@@ -7,8 +7,6 @@ using System.Text.RegularExpressions;
 using CyberArk.PasswordVault.PublicInterfaces;
 using Newtonsoft.Json;
 
-//Git
-
 namespace Jira.TicketingValidation{
 
 	#region Public Class - Main
@@ -156,9 +154,9 @@ namespace Jira.TicketingValidation{
 
 			//Set API Logon Parameters
 			jiralogonAddress	= parameters.TicketingConnectionAccount.Address;
-			if (parameters.AdditionalProperties.ContainsKey("URL"))
+			if (parameters.TicketingConnectionAccount.Properties.ContainsKey("URL"))
 			{
-				jiralogonAddress = parameters.AdditionalProperties["URL"];
+				jiralogonAddress = parameters.TicketingConnectionAccount.Properties["URL"];
 			}
 			jiralogonUsername	= parameters.TicketingConnectionAccount.UserName;
 			jiralogonPassword	= parameters.TicketingConnectionAccount.Password;
@@ -948,8 +946,7 @@ namespace Jira.TicketingValidation{
 			jiraApiKey_EndTime					= ExtractValueFromXML(checkParameters, "jiraJsonKey_EndTime");
 
 			//jira api call time out
-			string str_jiraApiCall_Timeout		= ExtractValueFromXML(checkParameters, "jiraApiCall_Timeout");
-			Int32.TryParse(str_jiraApiCall_Timeout, out jiraApiCall_Timeout);
+			string jiraApiCall_Timeout		= ExtractValueFromXML(checkParameters, "jiraApiCall_Timeout");
 
 			//log
 			logFilePath							= ExtractValueFromXML(checkParameters, "logFilePath");
