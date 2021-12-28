@@ -333,8 +333,8 @@ namespace Jira.TicketingValidation{
 					switch (chkLogonToTicketingSystem)
 					{
 						case true:
-							bool isConnectedToJira = LogonToTicketingSystem(jiralogonAddress, jiralogonUsername, jiralogonPassword);
 							LogWrite("Checking connectivity to Jira, Address=" + jiralogonAddress);
+							bool isConnectedToJira = LogonToTicketingSystem(jiralogonAddress, jiralogonUsername, jiralogonPassword);
 							if (isConnectedToJira == false)
 							{
 								errorMessage = msgConnectionError + " You can enter bypass code in ticket ID.";
@@ -883,7 +883,8 @@ namespace Jira.TicketingValidation{
 				url = "https://" + ticketingSystemAddress,
 				method = "get",
 				username = ticketingSystemUsername,
-				password = ticketingSystemPassword
+				password = ticketingSystemPassword,
+				timeout = jiraApiCall_Timeout
 			};
 
 			var response = LogonToJira.Call();
@@ -946,7 +947,7 @@ namespace Jira.TicketingValidation{
 			jiraApiKey_EndTime					= ExtractValueFromXML(checkParameters, "jiraJsonKey_EndTime");
 
 			//jira api call time out
-			string jiraApiCall_Timeout		= ExtractValueFromXML(checkParameters, "jiraApiCall_Timeout");
+			jiraApiCall_Timeout					= int.Parse(ExtractValueFromXML(checkParameters, "jiraApiCall_Timeout"));
 
 			//log
 			logFilePath							= ExtractValueFromXML(checkParameters, "logFilePath");

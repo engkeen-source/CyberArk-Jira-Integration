@@ -206,6 +206,8 @@ namespace Jira.TicketingValidation
 
     public class JiraApi
     {
+        public const System.Net.SecurityProtocolType SecurityProtocol = SecurityProtocolType.Tls12;
+
         public string username { get; set; }
         public string password { get; set; }
 
