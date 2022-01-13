@@ -212,15 +212,17 @@ namespace Jira.TicketingValidation
         public string password { get; set; }
 
         public string url { get; set; }
-        public string method { get; set; } = "GET";
+        public string method { get; set; }
         public string body { get; set; }
-        public int timeout { get; set; } = 5000;
+        public int timeout { get; set; }
 
         private RestClient client { get; set; }
+
+        //Method
         private void SetNewClient()
         {
             client = new RestClient(url);
-            client.Timeout = timeout;
+            client.Timeout = -1;
         }
 
         private RestRequest request { get; set; }
