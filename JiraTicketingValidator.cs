@@ -189,17 +189,17 @@ namespace Jira.TicketingValidation{
 			LogWrite(string.Format("{0}: {1}", "createJiraIncValidationCode"		, createJiraIncValidationCode));
 			LogWrite(string.Format("{0}: {1}", "jiraApiCall_Timeout"				, jiraApiCall_Timeout));
 
-			LogWrite("[ Fetching Ticketing connection account ] - " + ticketingSys);
+			LogWrite("[ Fetching Ticketing connection account ]");
 			LogWrite(string.Format("{0}: {1}", "jiralogonAddress"					, jiralogonAddress));
 			LogWrite(string.Format("{0}: {1}", "jiralogonUsername"					, jiralogonUsername));
 			LogWrite(string.Format("{0}: {1}", "Jira Object Name"					, parameters.TicketingConnectionAccount.ObjectName));
 			LogWrite(string.Format("{0}: {1}", "Jira Safe Name"						, parameters.TicketingConnectionAccount.Safe));
 			LogWrite(string.Format("{0}: {1}", "Jira Folder Name"					, parameters.TicketingConnectionAccount.Folder));
 			
-			LogWrite("[ Fetching Ticketing connection account -> Additional Properties ]" + ticketingSys);
+			LogWrite("[ Fetching Ticketing connection account -> Additional Properties ]");
 			foreach (var item in parameters.TicketingConnectionAccount.Properties)
 			{
-				if (item.Key == "LastFailDate")
+				if (item.Key == "LastFailDate" || item.Key == "LastSuccessChange" || item.Key == "LastSuccessReconciliation")
 				{
 					LogWrite(string.Format("{0}: {1}", item.Key, UnixTimeStampToDateTime(item.Value)));
 				}
@@ -229,9 +229,9 @@ namespace Jira.TicketingValidation{
 			LogWrite(string.Format("{0}: {1}", "DualControlRequestConfirmed"		, parameters.DualControlRequestConfirmed));
 
 			LogWrite("[ Fetching ticketing parameter -> Additonal Properties ] ");
-			foreach (var item in parameters.AdditionalProperties)
+			foreach (var item in parameters.TicketingConnectionAccount.Properties)
 			{
-				if (item.Key == "LastFailDate")
+				if (item.Key == "LastFailDate" || item.Key == "LastSuccessChange" || item.Key == "LastSuccessReconciliation")
 				{
 					LogWrite(string.Format("{0}: {1}", item.Key, UnixTimeStampToDateTime(item.Value)));
 				}
@@ -239,7 +239,7 @@ namespace Jira.TicketingValidation{
 				{
 					LogWrite(string.Format("{0}: {1}", item.Key, item.Value));
 				}
-				
+
 			}
 			#endregion
 
@@ -345,16 +345,22 @@ namespace Jira.TicketingValidation{
 					{
 						case true:
 							//Check Firewall Port
-							LogWrite("[ Checking firewall port to Jira ] - Address=" + jiralogonAddress);
+							LogWrite("[ Checking Firewall port 443 to " + jiralogonAddress + " ]");
 							bool isPortOpened = TestTcpConnection();
-							LogWrite("Firewall Port Connectivity to Jira" + isPortOpened);
+							LogWrite("Firewall Port 443 Connectivity to " + jiralogonAddress + " ] : " + isPortOpened);
+							if (isPortOpened == false)
+							{
+								ticketingOutput.UserMessage = "Firewall Port 443 Connectivity to " + jiralogonAddress + " ] : " + isPortOpened;
+								LogWrite(errorMessage);
+								LogWrite("[ Process ended ]");
+								return bValid;
+							}
 
 							//Check API Connectivity
-							LogWrite("[ Checking API Connectivity to Jira ] - Address=" + jiralogonAddress);
+							LogWrite("[ Checking API Connectivity to " + jiralogonAddress + " ]");
 							bool isConnectedToJira = LogonToTicketingSystem();
 							if (isConnectedToJira == false)
 							{
-								errorMessage = msgConnectionError + " You can enter bypass code in ticket ID.";
 								ticketingOutput.UserMessage = errorMessage;
 								LogWrite(errorMessage);
 								LogWrite("[ Process ended ]");
@@ -909,6 +915,10 @@ namespace Jira.TicketingValidation{
 			if (response.IsSuccessful)
 			{
 				return true;
+			}
+			else
+			{
+				errorMessage = response.ErrorMessage + " " + response.ErrorException;
 			}
 
 			errorMessage = errorMessage + " " + msgConnectionError + " " + "Unable to connect to " + jiralogonAddress + " ";

@@ -222,7 +222,9 @@ namespace Jira.TicketingValidation
         private void SetNewClient()
         {
             client = new RestClient(url);
-            client.Timeout = -1;
+            //bypass ssl validation check by using RestClient object
+            client.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+            client.Timeout = timeout;
         }
 
         private RestRequest request { get; set; }
