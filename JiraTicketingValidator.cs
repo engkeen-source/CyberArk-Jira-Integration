@@ -17,6 +17,10 @@ namespace Jira.TicketingValidation{
 		//Use TLS 1.2
 		public const System.Net.SecurityProtocolType SecurityProtocol = SecurityProtocolType.Tls12;
 
+		//PVWA hostname
+		public string pvwaHostname = System.Net.Dns.GetHostName();
+
+
 		//set Ticketing Parameters
 		public string checkParameters					= string.Empty;
 		public string ticketingID						= string.Empty;
@@ -163,12 +167,16 @@ namespace Jira.TicketingValidation{
 			jiralogonPassword	= parameters.TicketingConnectionAccount.Password;
 
 			//Audit
-			auditMessage = string.Format("Input={0} | DualControl={1} | DualControlRequestConfirmed={2} |", ticketingID, cybrDualControl, cybrDualControlRequestConfirmed);
+			auditMessage = string.Format("PVWA={0} | Input={1} | DualControl={2} | DualControlRequestConfirmed={3} |", pvwaHostname, ticketingID, cybrDualControl, cybrDualControlRequestConfirmed);
 
 			#endregion
 
 			#region Log
 			LogWrite("[ Initializing process ] ...");
+
+			LogWrite("[ Fetching PVWA Hostname ] ...");
+			LogWrite(string.Format("{0}: {1}", "PVWA Hostname", pvwaHostname));
+
 			LogWrite("[ Fetching XML parameter ]...");
 			LogWrite(string.Format("{0}: {1}", "allowedChangeTicketStatus"			, allowedChangeTicketStatus));
 			LogWrite(string.Format("{0}: {1}", "allowedServiceRequestTicketStatus"	, allowedServiceRequestTicketStatus));
