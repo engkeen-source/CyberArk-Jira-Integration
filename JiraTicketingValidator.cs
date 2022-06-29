@@ -748,6 +748,13 @@ namespace Jira.TicketingValidation{
 				string connectionAddress = GetConnectionAddress();
 				LogWrite("connectionAddress: " + connectionAddress);
 
+				//If connectionAddress is *, return True
+				if (connectionAddress == "*")
+				{ 
+					return true ;
+				}
+
+
 				if (string.IsNullOrEmpty(jiraApiKey_CI) == true)
 				{
 					errorMessage = string.Format("jiraApiKey_CI is null. Please check PAM Option.");
@@ -798,7 +805,7 @@ namespace Jira.TicketingValidation{
 				LogWrite("Ticket Assignee: " + strAssignee);
 				if (strAssignee == null)
 				{
-					errorMessage = string.Format("[{0} - {1}] {2} is not ticket's assignee", ticketingSys, ticketingID, cybrRequestingUser.ToLower());
+					errorMessage = string.Format("[{0} - {1}] {2} is not ticket assignee", ticketingSys, ticketingID, cybrRequestingUser.ToLower());
 					return false;
 				}
 
@@ -811,7 +818,7 @@ namespace Jira.TicketingValidation{
 
 				if (result == false)
 				{
-					errorMessage = string.Format("[{0} - {1}] {2} is not ticket's assignee.", ticketingSys, ticketingID, cybrRequestingUser.ToLower());
+					errorMessage = string.Format("[{0} - {1}] {2} is not ticket assignee.", ticketingSys, ticketingID, cybrRequestingUser.ToLower());
 				}
 			}
 
