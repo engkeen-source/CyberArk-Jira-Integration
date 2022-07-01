@@ -165,7 +165,7 @@ namespace Jira.TicketingValidation
 
     #region Public Class - to construst json body to query Jira CMDB
 
-    public class CmdbQuery
+    public class CmdbQueryHost
     {
         public string objectTypeId { get; set; } = "956";
         public int page { get; set; } = 1;
@@ -176,7 +176,7 @@ namespace Jira.TicketingValidation
         public string iql { get; set; }
         public int objectSchemaId { get; set; } = 47;
 
-        public CmdbQuery(string address)
+        public CmdbQueryHost(string address)
         {
             SetIql(address);
         }
@@ -189,7 +189,7 @@ namespace Jira.TicketingValidation
             { 
                 //Address is IP
                 case true:
-                    iql = "ObjectType = Host And \"Production LAN IP\" = " + address.Trim().ToUpper();
+                    iql = "ObjectType = Host And \"Production LAN IP Address\" = " + address.Trim().ToUpper();
                     break;
 
                 //Address is hostname/FQDN
@@ -197,6 +197,27 @@ namespace Jira.TicketingValidation
                     iql = "ObjectType = Host And Name = " + address.Trim().ToUpper();
                     break;
             }
+        }
+    }
+    public class CmdbQueryNetworkDevice
+    {
+        public string objectTypeId { get; set; } = "974";
+        public int page { get; set; } = 1;
+        public int asc { get; set; } = 1;
+        public string orderByTypeAttrId { get; set; } = "13387";
+        public int resultsPerPage { get; set; } = 25;
+        public bool includeAttributes { get; set; } = true;
+        public string iql { get; set; }
+        public int objectSchemaId { get; set; } = 47;
+
+        public CmdbQueryNetworkDevice(string address)
+        {
+            SetIql(address);
+        }
+
+        public void SetIql(string address)
+        {
+            iql = "ObjectType = \"Network and Security Device\" And Name = " + address.Trim().ToUpper();
         }
     }
 

@@ -496,7 +496,7 @@ namespace Jira.TicketingValidation{
 
 			//Query Cmdb
 			LogWrite("Querying Cmdb...");
-			var json = new CmdbQuery(address);
+			var json = new CmdbQueryHost(address);
 			var QueryToCmbd = new JiraApi()
 			{
 				url = "https://" + jiralogonAddress + "/rest/insight/1.0/object/navlist/iql",
@@ -754,15 +754,14 @@ namespace Jira.TicketingValidation{
 					return true ;
 				}
 
-
 				if (string.IsNullOrEmpty(jiraApiKey_CI) == true)
 				{
 					errorMessage = string.Format("jiraApiKey_CI is null. Please check PAM Option.");
 					return false;
 				}
 
-				//Query Cmdb
-				var json = new CmdbQuery(connectionAddress);
+				//Query Cmdb as hostname
+				var json = new CmdbQueryHost(connectionAddress);
 				var QueryToCmbd = new JiraApi()
 				{
 					url = "https://" + jiralogonAddress + "/rest/insight/1.0/object/navlist/iql",
@@ -776,7 +775,29 @@ namespace Jira.TicketingValidation{
 
 				//Get ConfigItemId
 				configItemID = CmdbResponse.ConfigItem_ID;
-				LogWrite("configItemID: " + configItemID);
+				LogWrite("configItemID - [query as host]: " + configItemID);
+
+				//If ConfigItemId is empty, query using network device format again.
+				if ( string.IsNullOrEmpty(configItemID) )
+				{
+					//Query Cmdb as network device
+					var json2 = new CmdbQueryNetworkDevice(connectionAddress);
+					var QueryToCmbd2 = new JiraApi()
+					{
+						url = "https://" + jiralogonAddress + "/rest/insight/1.0/object/navlist/iql",
+						method = "post",
+						username = jiralogonUsername,
+						password = jiralogonPassword,
+						timeout = jiraApiCall_Timeout,
+						body = JsonConvert.SerializeObject(json2)
+					};
+					var CmdbResponse2 = new CmdbQueryResponse(QueryToCmbd2.Call());
+
+					//Get ConfigItemId
+					configItemID = CmdbResponse2.ConfigItem_ID;
+					LogWrite("configItemID - [query as network device]: " + configItemID);
+
+				}
 
 				//Validate Ticket CI
 				result = jiraQuery.ValidateCI(configItemID, jiraApiKey_CI);
