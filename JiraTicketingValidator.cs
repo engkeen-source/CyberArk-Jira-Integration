@@ -622,6 +622,9 @@ namespace Jira.TicketingValidation{
 				case "INC":
 					ticketCategory		= "INC";
 					break;
+				case "IN":
+					ticketCategory = "INC";
+					break;
 				case "PR":
 					ticketCategory		= "PR";
 					break;
@@ -663,7 +666,7 @@ namespace Jira.TicketingValidation{
 						//Service Ticket
 						case "SR":
 							ChkTimeResult = true;
-							ChkCIResult = true;
+							ChkCIResult = ValidateCI(JiraQuery);
 							ChkImplementerResult = ValidateAssignee(JiraQuery);
 							ChkCurrentTicketStatus = ValidateTicketStatus(JiraQuery, ticketCategory);
 							break;
@@ -671,7 +674,7 @@ namespace Jira.TicketingValidation{
 						//Incident Ticket
 						case "INC":
 							ChkTimeResult = true;
-							ChkCIResult = true;
+							ChkCIResult = ValidateCI(JiraQuery);
 							ChkImplementerResult = ValidateAssignee(JiraQuery);
 							ChkCurrentTicketStatus = ValidateTicketStatus(JiraQuery, ticketCategory);
 							break;
@@ -679,7 +682,7 @@ namespace Jira.TicketingValidation{
 						//Problem Ticket
 						case "PR":
 							ChkTimeResult = true;
-							ChkCIResult = true;
+							ChkCIResult = ValidateCI(JiraQuery);
 							ChkImplementerResult = ValidateAssignee(JiraQuery);
 							ChkCurrentTicketStatus = ValidateTicketStatus(JiraQuery, ticketCategory);
 							break;
