@@ -352,8 +352,7 @@ namespace Jira.TicketingValidation
                     JObject j_Assignee = JObject.Parse(jToken_Assignee.ToString());
 
                     //Check if assignee is "null"
-                    if (jToken_Assignee.ToString() == "null")
-                    {
+                    if (jToken_Assignee.Type == JTokenType.Null) {
                         return null;
                     }
 
