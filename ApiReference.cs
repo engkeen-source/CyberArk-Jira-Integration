@@ -349,15 +349,14 @@ namespace Jira.TicketingValidation
                 bool j_Assignee_Exist = j_Fields.TryGetValue("assignee", out JToken jToken_Assignee);
                 if (j_Assignee_Exist == true)
                 {
-                    JObject j_Assignee = JObject.Parse(jToken_Assignee.ToString());
 
                     //Check if assignee is "null"
-                    if (jToken_Assignee.ToString() == "null")
-                    {
+                    if (jToken_Assignee.Type == JTokenType.Null) {
                         return null;
                     }
 
                     //Return assignee
+                    JObject j_Assignee = JObject.Parse(jToken_Assignee.ToString());
                     bool j_Name_Exist = j_Assignee.TryGetValue("name", out JToken jToken_Name);
                     if (string.IsNullOrEmpty(jToken_Name.ToString()) == false)
                     {
