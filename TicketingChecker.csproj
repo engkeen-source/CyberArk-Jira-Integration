@@ -7,8 +7,8 @@
     <ProjectGuid>{BB91BE46-B7DD-4383-8352-7C7C2038DBA5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JiraValidator</RootNamespace>
-    <AssemblyName>JiraValidator</AssemblyName>
+    <RootNamespace>TicketingChecker</RootNamespace>
+    <AssemblyName>TicketingChecker</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -50,8 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiReference.cs" />
-    <Compile Include="JiraTicketingValidator.cs" />
+    <Compile Include="TicketingPatternChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
