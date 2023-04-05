@@ -79,8 +79,11 @@ namespace Jira.TicketingValidation{
 		public string allowTicketFormatRegex			= string.Empty;
 
 		//set check condition bool
-		public bool enChkCI								= true;
-		public bool enChkTime							= true;
+		public bool enChkCI_CR							= true;
+        public bool enChkCI_SR							= true;
+        public bool enChkCI_INC							= true;
+        public bool enChkCI								= true; //deduced based on enChkCI_CR, enChkCI_SR, enChkCI_INC
+        public bool enChkTime							= true;
 		public bool enChkImplementer					= true;
 
 		//set jira api parameter
@@ -191,8 +194,10 @@ namespace Jira.TicketingValidation{
 			LogWrite(string.Format("{0}: {1}", "msgInvalidImplementer"				, msgInvalidImplementer));
 			LogWrite(string.Format("{0}: {1}", "msgInvalidImplementer"				, chkLogonToTicketingSystem));
 			LogWrite(string.Format("{0}: {1}", "enChkTime"							, enChkTime));
-			LogWrite(string.Format("{0}: {1}", "enChkCI"							, enChkCI));
-			LogWrite(string.Format("{0}: {1}", "enChkImplementer"					, enChkImplementer));
+			LogWrite(string.Format("{0}: {1}", "enChkCI_CR"							, enChkCI_CR));
+            LogWrite(string.Format("{0}: {1}", "enChkCI_SR"							, enChkCI_SR));
+            LogWrite(string.Format("{0}: {1}", "enChkCI_INC"						, enChkCI_INC));
+            LogWrite(string.Format("{0}: {1}", "enChkImplementer"					, enChkImplementer));
 			LogWrite(string.Format("{0}: {1}", "bypassJiraValidationCode"			, bypassJiraValidationCode));
 			LogWrite(string.Format("{0}: {1}", "createJiraIncValidationCode"		, createJiraIncValidationCode));
 			LogWrite(string.Format("{0}: {1}", "jiraApiCall_Timeout"				, jiraApiCall_Timeout));
@@ -623,7 +628,7 @@ namespace Jira.TicketingValidation{
 					ticketCategory		= "INC";
 					break;
 				case "IN":
-					ticketCategory = "INC";
+					ticketCategory		= "INC";
 					break;
 				case "PR":
 					ticketCategory		= "PR";
@@ -631,7 +636,10 @@ namespace Jira.TicketingValidation{
 
 			}
 
-			LogWrite("Sending Api to Jira");
+            LogWrite("ticketType(extracted from ticket ID): " + ticketType);
+            LogWrite("ticketCategory: " + ticketCategory);
+
+            LogWrite("Sending Api to Jira");
 			var QueryToJira = new JiraApi()
 			{
 				url = "https://" + jiralogonAddress + "/rest/api/2/issue/" + ticketID,
@@ -657,23 +665,26 @@ namespace Jira.TicketingValidation{
 					{
 						//Change Ticket
 						case "CR":
-							ChkTimeResult = ValidateTime(JiraQuery);
-							ChkCIResult = ValidateCI(JiraQuery);
+							enChkCI = enChkCI_CR;
+                            ChkTimeResult = ValidateTime(JiraQuery);
+                            ChkCIResult = ValidateCI(JiraQuery);
 							ChkImplementerResult = ValidateAssignee(JiraQuery);
 							ChkCurrentTicketStatus = ValidateTicketStatus(JiraQuery, ticketCategory);
 							break;
 
 						//Service Ticket
 						case "SR":
-							ChkTimeResult = true;
-							ChkCIResult = ValidateCI(JiraQuery);
+                            enChkCI = enChkCI_SR;
+                            ChkTimeResult = true;
+                            ChkCIResult = ValidateCI(JiraQuery);
 							ChkImplementerResult = ValidateAssignee(JiraQuery);
 							ChkCurrentTicketStatus = ValidateTicketStatus(JiraQuery, ticketCategory);
 							break;
 
 						//Incident Ticket
 						case "INC":
-							ChkTimeResult = true;
+                            enChkCI = enChkCI_INC;
+                            ChkTimeResult = true;
 							ChkCIResult = ValidateCI(JiraQuery);
 							ChkImplementerResult = ValidateAssignee(JiraQuery);
 							ChkCurrentTicketStatus = ValidateTicketStatus(JiraQuery, ticketCategory);
@@ -1010,10 +1021,12 @@ namespace Jira.TicketingValidation{
 			enChkTime							= ConvertToBool(ExtractValueFromXML(checkParameters, "validateJiraTimeStamp"));
 
 			//validateJiraCI
-			enChkCI								= ConvertToBool(ExtractValueFromXML(checkParameters, "validateJiraCI"));
+			enChkCI_CR							= ConvertToBool(ExtractValueFromXML(checkParameters, "validateJiraCIforCR"));
+            enChkCI_SR							= ConvertToBool(ExtractValueFromXML(checkParameters, "validateJiraCIforSR"));
+            enChkCI_INC							= ConvertToBool(ExtractValueFromXML(checkParameters, "validateJiraCIforINC"));
 
-			//validateJiraImplementer
-			enChkImplementer					= ConvertToBool(ExtractValueFromXML(checkParameters, "validateJiraImplementer"));
+            //validateJiraImplementer
+            enChkImplementer					= ConvertToBool(ExtractValueFromXML(checkParameters, "validateJiraImplementer"));
 
 			//bypass code
 			bypassJiraValidationCode			= ExtractValueFromXML(checkParameters, "bypassJiraValidationCode").Trim().ToUpper();

@@ -32,13 +32,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CyberArk.PasswordVault.PublicInterfaces">
-      <HintPath>..\CyberArk.PasswordVault.PublicInterfaces.dll</HintPath>
+      <HintPath>..\..\..\OneDrive\Documents\Career\CyberArk\PVWA extension\General Ticketing System\CyberArk.PasswordVault.PublicInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\OneDrive\Documents\Career\CyberArk\PVWA extension\General Ticketing System\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp">
-      <HintPath>..\RestSharp.dll</HintPath>
+      <HintPath>..\..\..\OneDrive\Documents\Career\CyberArk\PVWA extension\General Ticketing System\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
