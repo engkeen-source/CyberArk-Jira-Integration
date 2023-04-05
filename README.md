@@ -76,7 +76,13 @@
 
   enChkTime
 
-  enChkCI
+  enChkCI (yes/no) - enable CI check based on enChkCI_CR, enChkCI_SR, enChkCI_INC
+  
+  enChkCI_CR (yes/no) - enable CI check for ticket category CR
+  
+  enChkCI_SR (yes/no) - enable CI check for ticket category SR
+  
+  enChkCI_INC (yes/no) - enable CI check for ticket category INC
 
   enChkImplementer
 
